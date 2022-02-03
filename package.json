@@ -1,0 +1,25 @@
+{
+  "name": "ncsc-sim",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "k",
+  "license": "none",
+  "private": true,
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": "jest",
+    "dev": "snowpack dev"
+  },
+  "devDependencies": {
+    "@snowpack/plugin-webpack": "^3.0.0",
+    "snowpack": "^3.8.8"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.7.1",
+    "mithril": "^2.0.4",
+    "ramda": "^0.28.0",
+    "sortablejs": "^1.14.0",
+    "twemoji": "^13.1.0"
+  }
+}

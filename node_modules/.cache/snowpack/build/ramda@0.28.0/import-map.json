@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "ramda": "./ramda.js"
+  }
+}
