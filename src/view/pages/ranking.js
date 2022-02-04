@@ -33,22 +33,6 @@ const Values = [
     "Equity"
 ]
 
-const buttonShadow = css`
-box-shadow: 0 6px hsl(216,71%,78%);
-background-color: hsl(222,95%,95%);
-border-color: hsl(216,71%,78%);
-border-radius: .5rem;
-border-width: .1rem;
-color: hsl(216, 71%, 33%);
-font-weight:700
-`
-
-const hoverButton = css`
-&:hover{
-    box-shadow: 0 3px hsl(216,71%,78%);
-    top: 2px;
-   
-}`
 
 const addItem = (item)=>{
     const Ranked = Model.answers.ranking1
@@ -121,7 +105,7 @@ const RankedItem = (vnode)=>{
             return m("div", {class:`mw6 center fw7 ${cx(rankedGrid)}` },[
                 m("a", {class:"pa2 f3-ns f4 w-75"}, `${index+1}. ${item}`),
                 index > 0 ? 
-                m("button", {"aria-label": "Move up", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn", onclick:(e)=>{moveItem(item, index, index-1)}}, "🔼") : m("a", {class:"pa2"}, " "),
+                m("button", {"aria-label": "Move up", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn", style:"width:30px", onclick:(e)=>{moveItem(item, index, index-1)}}, "🔼") : m("a", {class:"pa2"}, " "),
                 index < 2 && index < howMany-1 ? 
                 m("button", {"aria-label": "Move down", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn", onclick:(e)=>{moveItem(item, index, index+1)}}, "🔽") :  m("a", {class:"pa2"}, " "),
 
