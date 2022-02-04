@@ -2,7 +2,10 @@ import {css, cx} from "@emotion/css"
 
 const AnswerGrid = css`
     display: grid;
-    grid-template-columns: 75px 1fr;
+    grid-template-columns: 50px 1fr;
+    @media(min-width: 30em){
+        grid-template-columns: 75px 1fr;
+    }
     grid-gap: 25px;
     align-items: center;
     position:relative;

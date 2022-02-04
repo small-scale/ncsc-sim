@@ -59,13 +59,13 @@ const AnswerView = (vnode)=>{
             return m("label", {
                 for:icon,
                
-                class:`pointer bw2 input-reset bg-transparent tl ba b--transparent pa2 ${Model.answers.courtRole == header ? cx(AnswerGrid, selectedClass) : cx(AnswerGrid, hoverAdjust)}`,
+                class:`pointer bw2 input-reset bg-transparent tl ba b--transparent pa2-ns pa1 ${Model.answers.courtRole == header ? cx(AnswerGrid, selectedClass) : cx(AnswerGrid, hoverAdjust)}`,
                 onclick: (e)=>{/*choose(header)*/}
             
                 }, [
                 m("input",{type:"radio", id:icon, class:cx(invisibleRadio), value:header,  name:"courtRole",}),
                 m("img", {src:`static/${icon}.png`, class:"ba b--black bw1"}),
-                m("p", {class:"pv0 mv0"}, [m("span", {class:"fw7 pr2"}, header), m("span", copy)]),
+                m("p", {class:"pv0 mv0 f5-ns f6 lh-copy"}, [m("span", {class:"fw7 pr2"}, header), m("span", copy)]),
                
             ])
         }
