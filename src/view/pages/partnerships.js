@@ -133,7 +133,7 @@ const PartnershipsView = (vnode)=>{
             return [
                 m("h1", {class:"f3 f1-ns fw7"}, "Select a partnership"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
-                m("p",`There are four data partnerships for you to choose from. Although in the future, you may be able to engage with multiple partners, here you may select only one to proceed with.`),
+                m("p",`Please choose one of the four partnerships below. In the real world, you may be working with multiple partners, but for the purposes of this exercise, just chose one.`),
                 m("p",`Click on each partnership to learn more. You can hit the button labeled "Choose this one" to make your choice`),
                 
                 m("div", {role:"tablist", class:`center mw7 ${cx(Tabs)}`},[
