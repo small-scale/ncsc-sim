@@ -139,10 +139,10 @@ const PartnershipsView = (vnode)=>{
                 m("div", {role:"tablist", class:`center mw7 ${cx(Tabs)}`},[
                    Partnerships.map((item, index)=>{
                         return m("button", {
-                            class:`br3 br--top input-reset w-100 pointer b--silver bt bl br ${item.id == Chosen ? "bg-washed-blue" : index === TabSelected ? "bg-white " : "bg-transparent bb"} ${item == Chosen ? "bw1" : ""} tc`,
+                            class:`br3 br--top input-reset w-100 pointer ${item.id == Chosen ? "bw1 b--blue" : "b--silver"} bt bl br ${item.id == Chosen ? "bg-washed-blue" : index === TabSelected ? "bg-white " : "bg-transparent bb"} ${item.id == Chosen ? "bw1" : ""} tc`,
                             role:"tab",
                             tabindex:"0",
-                            style:`${index === TabSelected ? "border-bottom:none" : ""}`,
+                            style:`${index === TabSelected ? "border-bottom:none; border-bottom-width:0;" : Chosen !== null ? "border-bottom-color:#357EDD; border-bottom-width:.125rem" : ""}`,
                             "aria-selected": (index === TabSelected).toString(),
                             onclick:(e)=>{
                                 console.log(e.target)
@@ -151,7 +151,7 @@ const PartnershipsView = (vnode)=>{
                             },[
                             m("img", {
                             
-                            style:"width:100px",
+                            style:"height:100px",
                             src:`static/${item.id}.png`,
                             alt:item.name
                             }),
@@ -177,7 +177,7 @@ const PartnershipView = (vnode)=>{
     return {
         view:(vnode)=>{
             const partner = vnode.attrs.partnership;
-            return m("section", {role:"tabpanel", class:`mw7 bb bl br b--silver center br3 br--bottom pv3 ph4 f4-ns f5 lh-copy ${partner.id == Chosen ? "bw1 bg-washed-blue":"bg-white"}`}, [
+            return m("section", {role:"tabpanel", class:`mw7 bb bl br ${partner.id == Chosen ? "bw1 b--blue" : "b--silver"} center br3 br--bottom pv3 ph4 f4-ns f5 lh-copy ${partner.id == Chosen ? "bw1 bg-washed-blue":"bg-white"}`}, [
          
                 m("h1", {class:`mv0 f2-ns lh-title f4 fw7 ${cx(TitleHeader)}`}, partner.name),
                 m("h2", {class:`mb3 fw4 f3-ns lh-title f5 ${cx(SubtitleHeader)}`}, partner.slug ),
