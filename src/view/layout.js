@@ -3,8 +3,8 @@ import twemoji from "twemoji"
 //import Colors from "../../style/styles"
 
 const Layout = {
-    oncreate: (vnode)=>{
-    },
+    route: null,
+
     view: (vnode)=>{
      // const path = (m.route.get()==="") || (m.route.get()==="/report") || (m.route.get()==="/results") 
         return m("div",{class:"wrapper flex flex-column", style:"min-height:100vh"},[
