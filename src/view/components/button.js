@@ -24,7 +24,7 @@ const Button = (vnode) =>{
         view: (vnode)=>{
             return m("button", {
                 onclick: vnode.attrs.onclick, 
-                class:`f3 center db tc pointer no-underline black bw2 bg-animate hover-bg-blue hover-white inline-flex items-center pa3 ba border-box `
+                class:`f4-ns f6 center db tc pointer no-underline black bw2 bg-animate hover-bg-light-blue hover-navy bn inline-flex items-center pa3 ba border-box `
                 }, vnode.attrs.text)
         }
     }

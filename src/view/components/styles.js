@@ -58,7 +58,10 @@ align-items: center;
 
 const HeaderClass = css`
     display: grid;
-    grid-template-columns: 125px 1fr;
+    grid-template-columns: 75px 1fr;
+    @media(min-width: 30em){
+        grid-template-columns: 125px 1fr;
+    }
     grid-template-areas: 
         "logo title"
         "logo subtitle";

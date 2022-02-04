@@ -99,7 +99,7 @@ const Partnerships = [
     {
         id: "county",
         icon: "county.png",
-        name: "Cherwell County Government",
+        name: "Cherwell County",
         slug: "A collaboration of local nonprofits and government agencies are sharing data to improve access to services for low-income and vulnerable residents.",
         content: [
             {
@@ -139,7 +139,7 @@ const PartnershipsView = (vnode)=>{
                 m("div", {role:"tablist", class:`center mw7 ${cx(Tabs)}`},[
                    Partnerships.map((item, index)=>{
                         return m("button", {
-                            class:`br3 br--top input-reset w-100 pointer b--silver bt bl br ${item.id == Chosen ? "bg-washed-green" : index === TabSelected ? "bg-white " : "bg-transparent bb"} ${item == Chosen ? "bw1" : ""} tc`,
+                            class:`br3 br--top input-reset w-100 pointer b--silver bt bl br ${item.id == Chosen ? "bg-washed-blue" : index === TabSelected ? "bg-white " : "bg-transparent bb"} ${item == Chosen ? "bw1" : ""} tc`,
                             role:"tab",
                             tabindex:"0",
                             style:`${index === TabSelected ? "border-bottom:none" : ""}`,
@@ -154,7 +154,9 @@ const PartnershipsView = (vnode)=>{
                             style:"width:100px",
                             src:`static/${item.id}.png`,
                             alt:item.name
-                        })])
+                            }),
+                            //m("p",{class:"fw7 tc f6"}, item.name)
+                        ])
                     })
                 ]),
 
@@ -175,22 +177,24 @@ const PartnershipView = (vnode)=>{
     return {
         view:(vnode)=>{
             const partner = vnode.attrs.partnership;
-            return m("section", {role:"tabpanel", class:`mw7 bb bl br b--silver center br3 br--bottom pv3 ph4 f4-ns f5 lh-copy ${partner.id == Chosen ? "bw1 bg-washed-green":"bg-white"}`}, [
+            return m("section", {role:"tabpanel", class:`mw7 bb bl br b--silver center br3 br--bottom pv3 ph4 f4-ns f5 lh-copy ${partner.id == Chosen ? "bw1 bg-washed-blue":"bg-white"}`}, [
                 m("div",{class:cx(HeaderClass)},[
                     m("img", {class: `pr2 ${cx(ImageHeader)}`, src:`static/${partner.icon}`}),
-                    m("h2", {class:`mv0 f2-ns f3 fw7 ${cx(TitleHeader)}`}, partner.name),
-                    m("p", {class:`mv0 f4-ns f5 ${cx(SubtitleHeader)}`}, partner.slug ),
+                    m("h1", {class:`mv0 f2-ns f4 fw7 ${cx(TitleHeader)}`}, partner.name),
+                    m("h2", {class:`mv0 fw4 f4-ns f6 ${cx(SubtitleHeader)}`}, partner.slug ),
                 ]),
                 
                 partner.content.map((item)=>{
-                    return m('p',[
+                    return m('p',{class:"f6 f4-ns lh-copy"},[
                         m("span", {class:"fw7"}, `${item.section}: `),
                         item.copy
                     ])
                 }),
 
                 partner.id != Chosen ? 
-                m(Button, {onclick:(e)=>{
+                m(Button, {
+                    class:"center",
+                    onclick:(e)=>{
                     console.log("click")
                     Chosen = partner.id;
                 }, text: `Choose ${partner.name}`},)
