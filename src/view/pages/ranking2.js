@@ -121,11 +121,11 @@ const RankedItem = (vnode)=>{
             return m("div", {class:`mw6 center fw7 ${cx(rankedGrid)}` },[
                 m("a", {class:"pa2 f3-ns f4 w-75"}, `${index+1}. ${item}`),
                 index > 0 ? 
-                m("button", {"aria-label": "Move up", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn", onclick:(e)=>{moveItem(item, index, index-1)}}, "🔼") : m("a", {class:"pa2"}, " "),
+                m("button", {"aria-label": "Move up", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn pa0", onclick:(e)=>{moveItem(item, index, index-1)}}, "🔼") : m("a", {class:"pa2"}, " "),
                 index < 2 && index < howMany-1 ? 
-                m("button", {"aria-label": "Move down", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn", onclick:(e)=>{moveItem(item, index, index+1)}}, "🔽") :  m("a", {class:"pa2"}, " "),
+                m("button", {"aria-label": "Move down", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn pa0", onclick:(e)=>{moveItem(item, index, index+1)}}, "🔽") :  m("a", {class:"pa2"}, " "),
 
-                m("button", {"aria-label": "Remove", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn", onclick:(e)=>{deleteItem(item, index)}}, "❌"),
+                m("button", {"aria-label": "Remove", oncreate:(vnode)=>{twemoji.parse(vnode.dom, {folder: 'svg', ext: '.svg'})}, class:"pointer input-reset bg-transparent bn pa0", onclick:(e)=>{deleteItem(item, index)}}, "❌"),
             ])
             
         }
