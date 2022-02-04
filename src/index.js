@@ -42,7 +42,7 @@ const AppRouter = ()=>{
         },
         '/ranking1':{
             view:()=>{
-           //     window.scrollTo(0,0);
+           //     window.scrollTo(0,0);git add
                return m(Layout, m(Ranking))
             }
         },
