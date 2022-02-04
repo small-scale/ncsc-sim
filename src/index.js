@@ -12,62 +12,62 @@ document.addEventListener('scroll', function(e) {
     console.log("scroll")
   });
 
-
+m.mount(
+    // Don't attach to the document
+    document.createDocumentFragment(),
+    {
+        route: null,
+      // We need a valid view for Mithril to behave
+      view : (vnode) => '',
+  
+      // Will execute on the DOM ready phase of every draw
+      onupdate(){
+        const route = m.route.get()
+  
+        if(route !== this.route) {
+            scrollTo(0, 0)
+            console.log("scroll")
+        }
+     
+        this.route = route
+      }
+    }
+  )
 const AppRouter = ()=>{
     m.route(document.body,'/',{
         '/':{
-            onmatch:()=>{
-                window.scrollTo(0,0)
-            },
-            render:()=>{
+            
+            view:()=>{
                return m(Layout, m(Introduction))
             }
         },
         '/ranking1':{
-            onmatch:()=>{
-                window.scrollTo(0,0)
-            },
-            render:()=>{
+            view:()=>{
                return m(Layout, m(Ranking))
             }
         },
         '/ranking2':{
-            onmatch:()=>{
-                window.scrollTo(0,0)
-            },
-            render:()=>{
+            view:()=>{
                return m(Layout, m(RankingTwo))
             }
         },
         '/mc1':{
-            onmatch:()=>{
-                window.scrollTo(0,0)
-            },
-            render:()=>{
+            view:()=>{
                 return m(Layout, m(MC))
             }
         },
         '/partnership':{
-            onmatch:()=>{
-                window.scrollTo(0,0)
-            },
-            render:()=>{
+            view:()=>{
                 return m(Layout, m(PartnershipsView))
             }
         },
         '/pilots':{
-            onmatch:()=>{
-                window.scrollTo(0,0)
-            },
-            render:(vnode)=>{
+            view:(vnode)=>{
                 return m(Layout, m(PilotsView, {partner:m.route.param("partner")}))
             }
         },
         '/discussion':{
-            onmatch:()=>{
-                window.scrollTo(0,0)
-            },
-            render:()=>{
+            view:()=>{
                return m(Layout, m(Discussion))
             }
         },

@@ -44,7 +44,7 @@ const PilotsView = (vnode)=>{
             m("section", {class:"f4-ns f5 lh-copy"}, [
                 m("p",`Based on your partnership selection, there are ${length(pilotSubset)} pilots available to you. You can select one to proceed with.`),
                 
-                m("form", {
+                m("div", {
                     class:`center mw12 ${cx(PilotsGrid)}`,
                     oninput: (e)=>{
                         Model.answers.pilot = e.target.value

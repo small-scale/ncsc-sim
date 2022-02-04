@@ -71,6 +71,7 @@ const PilotsGrid = css`
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 20px;
+    position:relative;
 `
 
 const PilotGrid = css`
@@ -85,7 +86,8 @@ const PilotGrid = css`
     grid-template-areas:
         "logo title"
         "subtitle subtitle";
-    grid-gap: 10px 
+    grid-gap: 10px;
+    position:relative; 
 `
 
 const ImageHeader = css`

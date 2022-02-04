@@ -3,6 +3,7 @@ import { Button, LinkButton } from "../components/button"
 import { Tabs, HeaderClass, ImageHeader, TitleHeader, SubtitleHeader } from "../components/styles"
 
 import {css, cx} from "@emotion/css"
+import { Model } from "../../model/model"
 
 
 let TabSelected = 0
@@ -195,6 +196,7 @@ const PartnershipView = (vnode)=>{
                     onclick:(e)=>{
                     console.log("click")
                     Chosen = partner.id;
+                    Model.answers.partnership = partner.id;
                 }, text: `Choose ${partner.name}`},)
                 : null
             ])
