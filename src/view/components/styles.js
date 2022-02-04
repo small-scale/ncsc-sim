@@ -75,10 +75,16 @@ const PilotsGrid = css`
 
 const PilotGrid = css`
     display: grid;
-    grid-template-columns: 100px 1fr;
-    grid-template-areas:
+    grid-template-columns: 50px 1fr;
+    @media(min-width: 30em){
+        grid-template-columns: 100px 1fr;
+        grid-template-areas:
         "logo title"
         "logo subtitle";
+    }
+    grid-template-areas:
+        "logo title"
+        "subtitle subtitle";
     grid-gap: 10px 
 `
 
@@ -88,7 +94,10 @@ const ImageHeader = css`
 `
 const TitleHeader = css`
     grid-area: title;
-    align-self:end;
+    align-self:center;
+    @media(min-width: 30em){
+        align-self:end;
+    }
 `
 const SubtitleHeader = css`
     grid-area: subtitle;

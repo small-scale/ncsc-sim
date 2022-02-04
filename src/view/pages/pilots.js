@@ -79,8 +79,8 @@ const PilotView = (vnode)=>{
                 },[
                 m("input",{type:"radio", id:pilot.id, class:cx(invisibleRadio), value:pilot.id,  name:"pilotRole",}),
                 m("img", {class: cx(ImageHeader), src:`static/${pilot.id}.png`}),
-                m("p", {class:`fw7 f4 mv0 lh-title ${cx(TitleHeader)}`}, pilot.name),
-                m("p", {class:`mv0 f5 ${cx(SubtitleHeader)}`}, pilot.copy)
+                m("p", {class:`fw7 f4-ns f5 mv0 lh-title ${cx(TitleHeader)}`}, pilot.name),
+                m("p", {class:`mv0 f5-ns f6 ${cx(SubtitleHeader)}`}, pilot.copy)
             ])
         }
     }
