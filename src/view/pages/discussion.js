@@ -22,8 +22,8 @@ const Discussion = ()=>{
                 m("p", `This simulation was written by Keith Porcaro (small scale), Zach Zarnow (NCSC), and Danielle Hirsch (NCSC).`),
                 m("p",  [m("span",{class:"fw7"}, `small scale`), ` helps communities navigate a digitizing world. We design training materials, build simulations, and consult on data and technology governance.`]),
                 m("p", [m("span",{class:"fw7"}, `The National Center for State Courts Access to Justice team`),` provides technical assistance and support to courts to help them ensure meaningful access to the courts for all. We work on process simplification and improvement, legal information, and a bunch of other stuff. Let's talk.`]),
-                m("p",`To remix this simulation, or make your own, visit `, m("a", {href:"https://smallscale.org/?ref=ncscsim", class:"link black"},`small scale.`)),
-                m("p",`If you're interested in learning more about possible data partnerships, get in touch with the `, m("a", {href:"https://ncsc.org/a2j", class:"link black"},`NCSC A2J team.`)),
+                m("p",`To remix this simulation, or make your own, visit `, m("a", {href:"https://smallscale.org/?ref=ncscsim", class:"link black underline"},`small scale`),`.`),
+                m("p",`If you're interested in learning more about possible data partnerships, get in touch with the `, m("a", {href:"https://ncsc.org/a2j", class:"link black underline"},`NCSC A2J team`),`.`),
 
                
               

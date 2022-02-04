@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@emotion/css": "^11.7.1",
+    "firebase": "^9.6.6",
     "mithril": "^2.0.4",
     "ramda": "^0.28.0",
     "twemoji": "^13.1.0"

@@ -16,6 +16,12 @@ const Model = {
         pilot: null
     },
 
+    update:(id, data)=>{
+        //check whether the update is allowed (if multiplayer participant)
+        //modify answer
+        //update firebsae
+    },
+
     content: {
         "courtRole":{
             choices: [

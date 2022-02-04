@@ -3,6 +3,7 @@ import Layout from "./view/layout"
 import Discussion from "./view/pages/discussion"
 import Introduction from "./view/pages/intro"
 import MC from "./view/pages/mc"
+import DevMenu from "./view/pages/devmenu"
 import {PartnershipsView} from "./view/pages/partnerships"
 import PilotsView from "./view/pages/pilots"
 import Ranking from "./view/pages/ranking"
@@ -35,6 +36,11 @@ m.mount(
   )
 const AppRouter = ()=>{
     m.route(document.body,'/',{
+        '/devmenu':{
+            view:()=>{
+                return m(Layout, m(DevMenu))
+            }
+        },
         '/':{
             
             view:()=>{
