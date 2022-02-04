@@ -142,7 +142,7 @@ const PartnershipsView = (vnode)=>{
                             class:`br3 br--top input-reset w-100 pointer ${item.id == Chosen ? "bw1 b--blue" : "b--silver"} bt bl br ${item.id == Chosen ? "bg-washed-blue" : index === TabSelected ? "bg-white " : "bg-transparent bb"} ${item.id == Chosen ? "bw1" : ""} tc`,
                             role:"tab",
                             tabindex:"0",
-                            style:`${index === TabSelected ? "border-bottom:none; border-bottom-width:0;" : Chosen !== null ? "border-bottom-color:#357EDD; border-bottom-width:.125rem" : ""}`,
+                            style:`max-height:100px; ${index === TabSelected ? "border-bottom:none; border-bottom-width:0;" : Partnerships[TabSelected].id === Chosen ? "border-bottom-color:#357EDD; border-bottom-width:.125rem" : ""}`,
                             "aria-selected": (index === TabSelected).toString(),
                             onclick:(e)=>{
                                 console.log(e.target)
@@ -151,7 +151,7 @@ const PartnershipsView = (vnode)=>{
                             },[
                             m("img", {
                             
-                            style:"height:100px",
+                            style:"width:100px;",
                             src:`static/${item.id}.png`,
                             alt:item.name
                             }),
