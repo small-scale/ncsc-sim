@@ -55,7 +55,7 @@ const PilotsView = (vnode)=>{
                     })
                 ]),
 
-                m(LinkButton, {text:"Next!", href:"/discussion"})
+                vnode.attrs.mp === true ? null :m(LinkButton, {text:"Next!", href:"/discussion"})
 
 
                 //m(PartnershipView, {partnership: Partnerships[TabSelected]})

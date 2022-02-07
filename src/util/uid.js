@@ -1,7 +1,8 @@
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid'
 
 const UID = ()=>{
-    return nanoid(12)
+    const nanoid = customAlphabet("BCDFGHKJLMNPQRSTUVWXZ",6)
+    return nanoid();
 }
 
 export {UID}

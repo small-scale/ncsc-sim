@@ -14,9 +14,9 @@ const choose = (answer)=>{
 }
 
 
-const MC = ()=>{
+const MC = (vnode)=>{
     return {
-        view:()=>{
+        view:(vnode)=>{
             return [
             m("h1", {class:"f3 f1-ns fw7"}, "Question 3"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
@@ -26,7 +26,7 @@ const MC = ()=>{
                 m(AnswerListView),
                 
                 
-                m(LinkButton, {text:"Next!", href:"/partnership"})
+                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:"/partnership"})
               
             ])
             ]

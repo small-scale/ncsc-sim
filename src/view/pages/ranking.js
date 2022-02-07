@@ -62,9 +62,9 @@ const deleteItem = (item, index)=>{
 }
 
 
-const Ranking = ()=>{
+const Ranking = (vnode)=>{
     return {
-        view:()=>{
+        view:(vnode)=>{
             return [
             m("h1", {class:"f3 f1-ns fw7"}, "Question 1"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
@@ -74,7 +74,7 @@ const Ranking = ()=>{
                 m(RankedList),
                 m(ValuesList),
                 
-                m(LinkButton, {text:"Next!", href:"/ranking2"})
+                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:"/ranking2"})
               
             ])
             ]

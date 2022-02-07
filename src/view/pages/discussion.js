@@ -3,9 +3,9 @@ import { LinkButton } from "../components/button"
 
 
 
-const Discussion = ()=>{
+const Discussion = (vnode)=>{
     return {
-        view:()=>{
+        view:(vnode)=>{
             return [
             m("h1", {class:"f3 f1-ns fw7"}, "Discussion"),
             m("section", {class:"f4-ns f5 lh-copy"}, [

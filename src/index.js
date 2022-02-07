@@ -8,10 +8,14 @@ import {PartnershipsView} from "./view/pages/partnerships"
 import PilotsView from "./view/pages/pilots"
 import Ranking from "./view/pages/ranking"
 import RankingTwo from "./view/pages/ranking2"
+import MultiplayerMenu from "./view/pages/multiplayer"
+import HostDash from "./view/pages/host"
+import { JoinDash, JoinView } from "./view/pages/join"
+import { Player } from "./model/multiplayer"
+import { signInAnonymously } from "firebase/auth"
+import { auth } from "./util/firebase"
 
-document.addEventListener('scroll', function(e) {
-    console.log("scroll")
-  });
+
 
 m.mount(
     // Don't attach to the document
@@ -39,6 +43,11 @@ const AppRouter = ()=>{
         '/devmenu':{
             view:()=>{
                 return m(Layout, m(DevMenu))
+            }
+        },
+        '/mp':{
+            view:()=>{
+                return m(Layout, m(MultiplayerMenu, {error:m.route.param("error")}))
             }
         },
         '/':{
@@ -75,6 +84,36 @@ const AppRouter = ()=>{
         '/discussion':{
             view:()=>{
                return m(Layout, m(Discussion))
+            }
+        },
+        '/host/:id':{
+            // TODO: use a route resolver to prevent navigation to this page without setting options
+            view:(vnode)=>{
+               return m(Layout, m(HostDash, {room: m.route.param("id")}))
+            }
+        },
+        '/join':{
+            view:()=>{
+               return m(Layout, m(JoinDash, {room:m.route.param("room")}))
+            }
+        },
+        '/run/:id':{
+            onmatch: async (args)=>{
+                signInAnonymously(auth).then(async () => {
+                    console.log("checking")
+                    await Player.check(args["id"], true)
+
+                  })
+                  .catch(async (error) => {
+                    await Player.check(args["id"], false)
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // ...
+                  });
+            },
+            // TODO: use a route resolver to prevent navigation to this page without setting options
+            render:()=>{
+               return m(Layout, m(JoinView, {room: m.route.param("id")}))
             }
         },
     })

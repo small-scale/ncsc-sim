@@ -130,7 +130,7 @@ const Partnerships = [
 const PartnershipsView = (vnode)=>{
 
     return {
-        view: ()=>{
+        view: (vnode)=>{
             return [
                 m("h1", {class:"f3 f1-ns fw7"}, "Select a partnership"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
@@ -165,7 +165,7 @@ const PartnershipsView = (vnode)=>{
                /* Partnerships.map((partnership)=>{
                     return m(PartnershipView, {partnership: partnership, key: partnership.id})
                 })*/
-                m(LinkButton, {text:"Next!", href:`/pilots?partner=${Chosen}`, partner:Chosen})
+                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:`/pilots?partner=${Chosen}`, partner:Chosen})
 
             ])
             ]

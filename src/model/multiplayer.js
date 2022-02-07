@@ -1,9 +1,58 @@
 //player status
+import { getAuth, onAuthStateChanged, } from "firebase/auth";
+import { db } from "../util/firebase";
+import { arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, setDoc, query, updateDoc } from "firebase/firestore"; 
+import { UID } from "../util/uid";
+import m from "mithril";
 
-const User = {
+const auth = getAuth();
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    //check to see if userDoc exists. if it doesn't, create one.
+    const userDoc = doc(db,"users",user.uid)
+    const userSnap = await getDoc(userDoc)
+    const uid = user.uid;
+    User.id = uid;
+    if(userSnap.exists()){
+        console.log("exists")
+        createListener(user.uid)
+    } else {
+        await setDoc(doc(db, "users", user.uid), {
+            id: user.uid,
+            host:[],
+            join:[]
+        })
+        createListener(user.uid)
+    }
+
+    
+    
+    // ...
+  } else {
+    // User is signed out
+    // ...
+   // ConnectionListener();
+  }
+});
+
+const createListener = (userId)=>{
+    ConnectionListener = onSnapshot(doc(db, "users", userId), (doc)=>{
+        // UserData = doc.data();
+         User.host = doc.data().host,
+         User.join = doc.data().join || []
+         m.redraw()
+     })
+}
+
+
+let User = {
     id: null,
     status: "",
+    host:[],
+    join:[]
 }
+
+let UserData;
 
 const Run = {
     id: "",
@@ -11,53 +60,169 @@ const Run = {
     route:"",
 }
 
+
 const RunData = {
 
 }
 
+let ConnectionListener;
+
 const Host = {
-    init:()=>{
+
+    init:async (uid)=>{
         //initialize
+        if(User.id !== null){
+            const id = UID()
+            await setDoc(doc(db,"rooms",id),{
+                owner: User.id,
+                id: id,
+                route: "/",
+                status:"open"
+                 
+            },{
+                merge: true
+            });
+            await setDoc(doc(db,"users",User.id),{
+                host:arrayUnion(id)
+            },
+            {
+                merge: true
+            });
+            Run.id = id
+            return id
+        }
+        else return null
+       
+        
     },
-    start:()=>{
-        //start run
+    update: async(room, data)=>{
+        const roomRef = doc(db,"rooms",room)
+        await updateDoc(roomRef, data, {merge:true})
     },
-    goTo:(route)=>{
-        //direct everyone to route
+    connect:async (room)=>{
+        const participantRef = query(collection(db, "rooms", room, "participants"))
+        const roomRef = doc(db, "rooms", room)
+
+        Host.roomListener = await onSnapshot(roomRef, (doc)=>{
+            Host.room = doc.data()
+        })
+
+        Host.participantListener = await onSnapshot(participantRef, (querySnapshot)=>{
+            querySnapshot.forEach((doc)=>{
+                Host.participantData[doc.id] = doc.data()
+                
+            })
+            m.redraw();
+        })
+            //connect to data listeners
     },
-    pause:(route)=>{
-        //coffee break (toggle)
-    },
-    end:()=>{
-        //end run
-    },
-    connect:()=>{
-        //connect to data listeners
-    },
+    participantListener:{},
+    roomListener:{},
+    room:{},
+    participantData: {
+
+    }
 }
 
 
 
 const Player = {
-    init:()=>{
+    init:(room)=>{
         //initial
+    },
+    check:async (room, userBypass)=>{
+        //check if user is logged in
+        if(User.id===null && userBypass === false){
+            m.route.set("/mp", {error:"Not connected to online services."})
+            return false;
+        } else {
+            console.log("user exists")
+            //check if room exists
+            const roomRef = doc(db, "rooms", room);
+            const roomDoc = await getDoc(roomRef)
+            const partRef = doc(db, "rooms", room, "participants", User.id);
+            const partDoc = await getDoc(partRef)
+            if(!roomDoc.exists()){
+                console.log("room does not exist")
+                m.route.set("/join", {error:"Room does not exist"})
+                return false;
+            } else if(roomDoc.data().status === "closed") {
+                console.log("room is closed")
+                m.route.set("/join", {error:"Room is closed"})
+                return false;
+            } else if (!partDoc.exists()){
+                console.log("room is open but player isn't joined")
+                m.route.set("/join", {error:"The room is open, but you need to join first"})
+                return false;
+            } else {
+                console.log("everything ok")
+                await Player.connect(room)
+                m.redraw();
+                return true
+            }
+            
+
+        }
     },
     ready:()=>{
         //mark status as ready
     },
     disconnect:()=>{
-        
+        if(Player.roomListener != {}){
+            Player.roomListener();
+        }
+        if(Player.playerListener != {}){
+            Player.playerListener();
+        }
     },
-    submit:(data)=>{
+    submit:async (room, data)=>{
+        const partRef = await getDoc(db, "rooms", room, "participants", User.id);
+        await updateDoc(partRef, data, {merge:true})
         //send data to connection
     },
-    connect:()=>{
-        //connect to data listeners
+    connect:async (room)=>{
+        const participantRef = doc(db,"rooms",room,"participants",User.id)
+        const roomRef = doc(db, "rooms", room)
+
+        Player.roomListener = onSnapshot(roomRef,(doc)=>{
+            Player.roomData = doc.data();
+            console.log("room update")
+            console.log(doc.data())
+            m.redraw();
+        })
+
+        Player.participantListener = onSnapshot(participantRef,(doc)=>{
+            Player.playerData = doc.data();
+            m.redraw();
+
+        })
     },
-    join:(room)=>{
-        //join a room
-    }
+    join:async (room, name)=>{
+        const roomRef = doc(db, "rooms", room);
+        const roomSnap = await getDoc(roomRef);
+
+        if(roomSnap.exists() && roomSnap.data().status == "open"){
+            const partRef = collection(db, "rooms", room, "participants")
+         
+            await setDoc(doc(partRef, User.id), {
+                id: User.id,
+                name:name
+            })
+            await setDoc(doc(db,"users",User.id),{
+                join:arrayUnion(room)
+            },
+            {
+                merge: true
+            }); 
+            return room
+        }
+        
+    },
+    playerListener:{},
+    roomListener:{},
+    roomData:{},
+    playerData: {},
 }
 //game status 
 
-export {Player, Host, User, Run, RunData }
+export {Player, Host, User, Run, RunData, UserData}

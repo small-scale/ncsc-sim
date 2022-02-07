@@ -3,9 +3,9 @@ import { LinkButton } from "../components/button"
 
 
 
-const Introduction = ()=>{
+const Introduction = (vnode)=>{
     return {
-        view:()=>{
+        view:(vnode)=>{
             return [
             m("h1", {class:"f3 f1-ns fw7"}, "Building court data partnerships"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
@@ -18,7 +18,7 @@ const Introduction = ()=>{
                 m("p",[`Second, you’ll `, m("span",{class:"fw7"},`select a primary data partner`), `. Each potential partnership has different strengths and weaknesses, and will facilitate or foreclose different types of pilot projects.`]),
                 m("p",[`Finally, you’ll `,m("span",{class:"fw7"},`select a pilot project.`),` The pilot projects available to you will change based on your primary data partner. In addition to selecting a pilot project, we’ll ask you to reflect on what you hope to learn from the selected pilot, and how you might evaluate whether it should continue.`]),
                 
-                m(LinkButton, {text:"Next!", href:"/ranking1"})
+                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:"/ranking1"})
               
             ])
             ]
