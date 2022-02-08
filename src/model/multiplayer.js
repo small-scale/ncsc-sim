@@ -195,6 +195,10 @@ const Player = {
         const roomRef = doc(db, "rooms", room)
 
         Player.roomListener = onSnapshot(roomRef,(doc)=>{
+            const oldRoute = Player.roomData.route
+            if(oldRoute !== doc.data().route){
+                window.scrollTo(0,0)
+            }
             Player.roomData = doc.data();
             console.log("room update")
             console.log(doc.data())
