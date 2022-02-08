@@ -4,6 +4,7 @@ import { db } from "../util/firebase";
 import { arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, setDoc, query, updateDoc } from "firebase/firestore"; 
 import { UID } from "../util/uid";
 import m from "mithril";
+import { mergeDeepRight } from "ramda";
 
 const auth = getAuth();
 onAuthStateChanged(auth, async (user) => {
@@ -176,8 +177,17 @@ const Player = {
         }
     },
     submit:async (room, data)=>{
-        const partRef = await getDoc(db, "rooms", room, "participants", User.id);
-        await updateDoc(partRef, data, {merge:true})
+        if(room!==null){
+            const partRef = doc(db, "rooms", room, "participants", User.id);
+            await updateDoc(partRef, data, {merge:true})
+            return;
+        } else {
+            //if not multiplayer, skip all that and just update Player.playerData
+            const updatedData = mergeDeepRight(Player.playerData, data)
+            Player.playerData = updatedData;
+            return;
+        }
+        
         //send data to connection
     },
     connect:async (room)=>{
@@ -206,8 +216,16 @@ const Player = {
          
             await setDoc(doc(partRef, User.id), {
                 id: User.id,
-                name:name
-            })
+                name:name,
+                data:{
+                    ready: false,
+                    ranking1: [],
+                    ranking2: [],
+                    courtRole: null,
+                    partnership: null,
+                    pilot: null
+                }
+            }, {merge: true})
             await setDoc(doc(db,"users",User.id),{
                 join:arrayUnion(room)
             },
@@ -221,7 +239,14 @@ const Player = {
     playerListener:{},
     roomListener:{},
     roomData:{},
-    playerData: {},
+    playerData: {
+        ready: false,
+        ranking1: [],
+        ranking2: [],
+        courtRole: null,
+        partnership: null,
+        pilot: null
+    },
 }
 //game status 
 

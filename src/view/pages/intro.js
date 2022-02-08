@@ -1,11 +1,16 @@
 import m from "mithril"
+import { Player } from "../../model/multiplayer";
 import { LinkButton } from "../components/button"
 
 
 
 const Introduction = (vnode)=>{
+    
     return {
         view:(vnode)=>{
+            let mp = vnode.attrs.mp;
+            let ready = mp === true ? vnode.attrs.playerData.ready : null;
+            let room = mp == true ? vnode.attrs.room : null;
             return [
             m("h1", {class:"f3 f1-ns fw7"}, "Building court data partnerships"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
@@ -18,7 +23,15 @@ const Introduction = (vnode)=>{
                 m("p",[`Second, you’ll `, m("span",{class:"fw7"},`select a primary data partner`), `. Each potential partnership has different strengths and weaknesses, and will facilitate or foreclose different types of pilot projects.`]),
                 m("p",[`Finally, you’ll `,m("span",{class:"fw7"},`select a pilot project.`),` The pilot projects available to you will change based on your primary data partner. In addition to selecting a pilot project, we’ll ask you to reflect on what you hope to learn from the selected pilot, and how you might evaluate whether it should continue.`]),
                 
-                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:"/ranking1"})
+                vnode.attrs.mp === true ? 
+               m("p", {class:"tc pa2"}, [
+                 m("input", {type:"checkbox", class:"mr2", id:"ready", checked: ready, oninput:async (e)=>{
+                    // ready = e.target.value;
+                     await Player.submit(room, {ready:e.target.checked})
+                 }} ),
+                 m("label", {for:"ready"}, ready ? `Great! Sit tight and wait for your facilitator.`: `When you're ready to start, check the box.`), //make this an aria live
+                ]) :
+                m(LinkButton, {text:"Next!", href:"/ranking1"})
               
             ])
             ]

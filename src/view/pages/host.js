@@ -8,14 +8,13 @@ const HostDash = (vnode)=>{
     return {
         oninit:Host.connect(vnode.attrs.room),
         view:(vnode)=>{
-            console.log(vnode.attrs)
             return [
             m("h1", {class:"f3 f1-ns fw7"}, "Host"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
                 m("p",`Host Code: ${vnode.attrs.room}`),
                 m("p",`Participants`),
                 Object.entries(Host.participantData).map(([key, value])=>{
-                    return m("p", key)
+                    return m("p", value.name || "Anonymous")
                 }),
                 m("p",`Remote`),
                 m(Button, {
@@ -92,6 +91,9 @@ const HostDash = (vnode)=>{
                         }
                     }),
                 m("p", `Data`),
+                Object.entries(Host.participantData).map(([key, value])=>{
+                    return m("p",JSON.stringify(value))
+                })
               
               
             ])

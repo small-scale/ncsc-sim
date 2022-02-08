@@ -48,7 +48,7 @@ const JoinView = (vnode)=>{
                 m("p", `Joined ${vnode.attrs.room}`),
                 m("p", room.status),
                 m("p", room.route),
-                room.route ? m(JoinRouter[room.route]) : null
+                room.route ? m(JoinRouter[room.route], {playerData: Player.playerData, room:vnode.attrs.room}) : null
             ]
         }
     }
@@ -62,56 +62,57 @@ const JoinRouter = {
     "/": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(Introduction, {mp: true})
+                console.log(vnode.attrs.room)
+                return m(Introduction, {playerData: vnode.attrs.playerData, room:vnode.attrs.room, mp: true})
             }
         }
     },
     "intro": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(Introduction, {mp: true})
+                return m(Introduction, {playerData: vnode.attrs.playerData, room:vnode.attrs.room, mp: true})
             }
         }
     },
     "ranking1": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(Ranking, {mp: true})
+                return m(Ranking, {playerData: vnode.attrs.playerData, room:vnode.attrs.room, mp: true})
             }
         }
     },
     "ranking2": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(RankingTwo, {mp: true})
+                return m(RankingTwo, {playerData: vnode.attrs.playerData, room:vnode.attrs.room, mp: true})
             }
         }
     },
     "mc": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(MC, {mp: true})
+                return m(MC, {playerData: vnode.attrs.playerData, room:vnode.attrs.room, mp: true})
             }
         }
     },
     "partnership": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(PartnershipsView, {mp: true})
+                return m(PartnershipsView, {playerData: vnode.attrs.playerData, room:vnode.attrs.room, mp: true})
             }
         }
     },
     "pilot": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(PilotsView, {mp: true, pilot: vnode.attrs.pilot || null})
+                return m(PilotsView, {mp: true, room:vnode.attrs.room, partnership: vnode.attrs.partnership || null})
             }
         }
     },
     "discussion": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(Discussion, {mp: true})
+                return m(Discussion, {playerData: vnode.attrs.playerData, room:vnode.attrs.room, mp: true})
             }
         }
     },

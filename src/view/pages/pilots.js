@@ -5,6 +5,7 @@ import { length, filter, includes, propSatisfies } from "ramda"
 import { PilotGrid, PilotsGrid, ImageHeader, TitleHeader, SubtitleHeader, hoverAdjust, selectedClass, invisibleRadio } from "../components/styles"
 import { Model } from "../../model/model"
 import { LinkButton } from "../components/button"
+import { Player } from "../../model/multiplayer"
 
 
 const shuffle = (arr) => {
@@ -36,18 +37,20 @@ const producePilots = (partner = null)=>{
 
 const PilotsView = (vnode)=>{
     const pilotSubset = producePilots(vnode.attrs.partner)
-    console.log(vnode.attrs)
+    console.log(vnode.attrs.room)
     return {
         view: (vnode)=>{
+            let room = vnode.attrs.room || null
             return [
                 m("h1", {class:"f3 f1-ns fw7"}, "Select a pilot"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
                 m("p",`Based on your partnership selection, there are ${length(pilotSubset)} pilots available to you. You can select one to proceed with.`),
                 
-                m("div", {
+                m("form", {
                     class:`center mw12 ${cx(PilotsGrid)}`,
                     oninput: (e)=>{
-                        Model.answers.pilot = e.target.value
+                        console.log(e.target.value)
+                        Player.submit(room, {"pilot":e.target.value}) 
                     }
                     },[
                     pilotSubset.map((pilot)=>{
@@ -75,7 +78,7 @@ const PilotView = (vnode)=>{
         view: (vnode)=>{
             return m("label", {
                 for: pilot.id,
-                class:`pa2 ba bg-white pointer b--transparent bw2 br3 ${Model.answers.pilot === pilot.id ? cx(PilotGrid, selectedClass) : cx(PilotGrid, hoverAdjust)}`,
+                class:`pa2 ba bg-white pointer b--transparent bw2 br3 ${Player.playerData.pilot === pilot.id ? cx(PilotGrid, selectedClass) : cx(PilotGrid, hoverAdjust)}`,
                 },[
                 m("input",{type:"radio", id:pilot.id, class:cx(invisibleRadio), value:pilot.id,  name:"pilotRole",}),
                 m("img", {class: cx(ImageHeader), src:`static/${pilot.id}.png`}),

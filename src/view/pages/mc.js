@@ -4,13 +4,15 @@ import { AnswerGrid, AnswerListGrid, hoverAdjust, selectedClass, invisibleRadio 
 import { Model } from "../../model/model"
 
 import {css, cx} from "@emotion/css"
+import { Player } from "../../model/multiplayer"
 
 
 
 const Answers = Model.content.courtRole.choices
 
-const choose = (answer)=>{
-    Model.answers.courtRole = answer;
+const choose = (answer, room=null)=>{
+    Player.submit(room, {courtRole:answer})
+    //Model.answers.courtRole = answer;
 }
 
 
@@ -23,7 +25,7 @@ const MC = (vnode)=>{
                 m("p",`For this question, assume that laws around sealing court documents remain unchanged, and that there is sufficient technical and staff infrastructure to support whichever answer you choose.`),
                 m("p",{class:"f3-ns f4 fw2 mt2 tc"},`"In general, the court should have the following role in managing requests for court data from parties not involved in an instant case: "`),
                
-                m(AnswerListView),
+                m(AnswerListView, {room: vnode.attrs.room}),
                 
                 
                 vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:"/partnership"})
@@ -39,7 +41,8 @@ const MC = (vnode)=>{
 const AnswerListView = (vnode)=>{
     return {
         view:(vnode)=>{
-            return m("form", {class:`mw7 center ${cx(AnswerListGrid)}`, oninput:(e)=>{choose(e.target.value)}},                
+            let room = vnode.attrs.room
+            return m("form", {class:`mw7 center ${cx(AnswerListGrid)}`, oninput:(e)=>{choose(e.target.value, room)}},                
                 Answers.map((answer)=>{
                     return m(AnswerView, {answer:answer})
                 })
@@ -59,7 +62,7 @@ const AnswerView = (vnode)=>{
             return m("label", {
                 for:icon,
                
-                class:`pointer bw2 input-reset bg-transparent tl ba b--transparent pa2-ns pa1 ${Model.answers.courtRole == header ? cx(AnswerGrid, selectedClass) : cx(AnswerGrid, hoverAdjust)}`,
+                class:`pointer bw2 input-reset bg-transparent tl ba b--transparent pa2-ns pa1 ${Player.playerData.courtRole == header ? cx(AnswerGrid, selectedClass) : cx(AnswerGrid, hoverAdjust)}`,
                 onclick: (e)=>{/*choose(header)*/}
             
                 }, [
