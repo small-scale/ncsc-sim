@@ -221,14 +221,13 @@ const Player = {
             await setDoc(doc(partRef, User.id), {
                 id: User.id,
                 name:name,
-                data:{
-                    ready: false,
-                    ranking1: [],
-                    ranking2: [],
-                    courtRole: null,
-                    partnership: null,
-                    pilot: null
-                }
+                ready: false,
+                ranking1: [],
+                ranking2: [],
+                courtRole: null,
+                partnership: null,
+                pilot: null
+                
             }, {merge: true})
             await setDoc(doc(db,"users",User.id),{
                 join:arrayUnion(room)

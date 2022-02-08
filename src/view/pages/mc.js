@@ -44,7 +44,7 @@ const AnswerListView = (vnode)=>{
             let room = vnode.attrs.room
             return m("form", {class:`mw7 center ${cx(AnswerListGrid)}`, oninput:(e)=>{choose(e.target.value, room)}},                
                 Answers.map((answer)=>{
-                    return m(AnswerView, {answer:answer})
+                    return m(AnswerView, {answer:answer, key:answer.icon})
                 })
             )               
         }
