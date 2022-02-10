@@ -218,6 +218,10 @@ const Player = {
         const roomRef = doc(db, "rooms", room)
 
         Player.roomListener = onSnapshot(roomRef,(doc)=>{
+            const oldRoute = Player.roomData.route
+            if(oldRoute !== doc.data().route){
+                window.scrollTo(0,0)
+            }
             Player.roomData = doc.data();
             console.log("room update")
             console.log(doc.data())
@@ -240,14 +244,13 @@ const Player = {
             await setDoc(doc(partRef, User.id), {
                 id: User.id,
                 name:name,
-                data:{
-                    ready: false,
-                    ranking1: [],
-                    ranking2: [],
-                    courtRole: null,
-                    partnership: null,
-                    pilot: null
-                }
+                ready: false,
+                ranking1: [],
+                ranking2: [],
+                courtRole: null,
+                partnership: null,
+                pilot: null
+                
             }, {merge: true})
             await setDoc(doc(db,"users",User.id),{
                 join:arrayUnion(room)
