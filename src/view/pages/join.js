@@ -49,8 +49,8 @@ const JoinView = (vnode)=>{
             let room = Player.roomData
             return [
                 m("p", `Joined ${vnode.attrs.room}`),
-                m("p", room.status),
-                m("p", room.route),
+             /*   m("p", room.status),
+                m("p", room.route),*/
                 room.route ? m(JoinRouter[room.route], {playerData: Player.playerData, room:vnode.attrs.room}) : null
             ]
         }
