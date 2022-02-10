@@ -66,7 +66,7 @@ const AppRouter = ()=>{
                return m(Layout, m(RankingTwo))
             }
         },
-        '/mc1':{
+        '/mc':{
             view:()=>{
                 return m(Layout, m(MC))
             }
@@ -89,7 +89,7 @@ const AppRouter = ()=>{
         '/host/:id':{
             // TODO: use a route resolver to prevent navigation to this page without setting options
             view:(vnode)=>{
-               return m(Layout, m(HostDash, {room: m.route.param("id")}))
+               return m(Layout, {full:true},m(HostDash, {room: m.route.param("id")}))
             }
         },
         '/join':{

@@ -42,6 +42,9 @@ const JoinDash = (vnode)=>{
 
 const JoinView = (vnode)=>{
     return {
+        onremove:(vnode)=>{
+            Player.disconnect();
+        },
         view:(vnode)=>{
             let room = Player.roomData
             return [
@@ -102,10 +105,31 @@ const JoinRouter = {
             }
         }
     },
-    "pilot": (vnode)=>{
+    "pilot?partner=university": (vnode)=>{
         return {
             view:(vnode)=>{
-                return m(PilotsView, {mp: true, room:vnode.attrs.room, partnership: vnode.attrs.partnership || null})
+                return m(PilotsView, {mp: true, room:vnode.attrs.room, partner: "university"})
+            }
+        }
+    },
+    "pilot?partner=courtfeed": (vnode)=>{
+        return {
+            view:(vnode)=>{
+                return m(PilotsView, {mp: true, room:vnode.attrs.room, partner: "courtfeed"})
+            }
+        }
+    },
+    "pilot?partner=iliad": (vnode)=>{
+        return {
+            view:(vnode)=>{
+                return m(PilotsView, {mp: true, room:vnode.attrs.room, partner: "iliad"})
+            }
+        }
+    },
+    "pilot?partner=government": (vnode)=>{
+        return {
+            view:(vnode)=>{
+                return m(PilotsView, {mp: true, room:vnode.attrs.room, partner: "county"})
             }
         }
     },

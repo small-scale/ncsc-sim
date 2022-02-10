@@ -26,7 +26,7 @@ const shuffle = (arr) => {
 }
 
 const producePilots = (partner = null)=>{
-    const Pilots = Model.content.pilots.choices
+    const Pilots = Model.content.pilot
     if(partner===null){
         return shuffle(Pilots)
     }
@@ -58,7 +58,7 @@ const PilotsView = (vnode)=>{
                     })
                 ]),
 
-                vnode.attrs.mp === true ? null :m(LinkButton, {text:"Next!", href:"/discussion"})
+                vnode.attrs.mp === true || vnode.attrs.preview === true ? null :m(LinkButton, {text:"Next!", href:"/discussion"})
 
 
                 //m(PartnershipView, {partnership: Partnerships[TabSelected]})

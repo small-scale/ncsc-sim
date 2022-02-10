@@ -77,7 +77,7 @@ const Ranking = (vnode)=>{
                 m(RankedList, {room:vnode.attrs.room}),
                 m(ValuesList, {room:vnode.attrs.room}),
                 
-                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:"/ranking2"})
+                vnode.attrs.mp === true || vnode.attrs.preview === true ? null : m(LinkButton, {text:"Next!", href:"/ranking2"})
               
             ])
             ]

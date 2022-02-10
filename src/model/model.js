@@ -22,6 +22,17 @@ const Model = {
         //update firebsae
     },
 
+    getFieldById:(section, criterion, field)=>{
+        let output;
+        Model.content[section].some((item)=>{
+            if(item["id"]===criterion){
+                output = item[field]
+                return true;
+            }
+        })
+        return output
+    },
+
     content: {
         "partnership":[
             {
@@ -141,42 +152,40 @@ const Model = {
                 ]
             }
         ],
-        "courtRole":{
-            choices: [
+        "courtRole": [
                 {
-                    icon:"okay",
-                    header:"No role.",
+                    id:"okay",
+                    name:"No role.",
                     copy: "Court data should be open and available to everyone."
                    },
                    {
-                    icon:"inform",
-                    header:"Informed.",
+                    id:"inform",
+                    name:"Informed.",
                     copy: "The court should be informed of data requests (who is making them, what data they are accessing), but should have no role in approving or denying them."
                    },
                    {
-                       icon:"consult",
-                       header:"Consulting.",
+                       id:"consult",
+                       name:"Consulting.",
                        copy: "Data requesters should be required to consult with the court on how data requests can be improved or modified, but they are not required to accept the court’s recommendations."
                    },
                    {
-                       icon:"approve",
-                       header:"Approval.",
+                       id:"approve",
+                       name:"Approval.",
                        copy: "The court should be responsible for approving at least some large-scale data requests from non-litigants."
                    },
                    {
-                       icon:"veto",
-                       header:"Veto.",
+                       id:"veto",
+                       name:"Veto.",
                        copy: "The court should be able to prevent fulfillment of data requests if there is a compelling reason to do so."
                    },
                    {
-                       icon:"nope",
-                       header:"No public data.",
+                       id:"nope",
+                       name:"No public data.",
                        copy: "Court data should not be available to the public."
                    },
             ]
-        }, 
-        "pilots":{
-            choices: [
+        , 
+        "pilot":[
                 {
                     id: "fines",
                     partnerships: ["university", "iliad"],
@@ -256,7 +265,7 @@ const Model = {
                     copy: `A local children’s hospital and legal aid organization are partnering on a medical-legal partnership that incorporates child psychologists to address social, economic, and environmental barriers that entrench inequities in children’s health. The partnership would like to use live court data to conduct outreach to justice-involved courts, similar to a partnership they have with Cherwell County Schools.`
                 },
             ]
-        }
+       
     }
 
 }

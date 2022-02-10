@@ -8,7 +8,7 @@ const Layout = {
     view: (vnode)=>{
      // const path = (m.route.get()==="") || (m.route.get()==="/report") || (m.route.get()==="/results") 
         return m("div",{class:"wrapper flex flex-column", style:"min-height:100vh"},[
-            m("nav", {"class":"dt w-100 flex items-center justify-between mw8 border-box center pa3 pb3-ns pb0 ph5-l", style:"flex-shrink:0"},
+            m("nav", {"class":`dt w-100 flex items-center justify-between ${vnode.attrs.full ? "mw12": "mw8"} border-box center pa3 pb3-ns pb0 ph5-l`, style:"flex-shrink:0"},
               [
                   
                     m("img", {"class":"dib w4","src":"static/logotest.png","alt":"small scale"}),
@@ -19,10 +19,10 @@ const Layout = {
              
               ]
             ), 
-            m("main", {"class":"pa3 pa5-ns pt3-ns pt0 mw8 center spvar fw4 near-black", style:"flex-grow:1"},
+            m("main", {"class":`pa3 pa5-ns pt3-ns pt0 ${vnode.attrs.full ? "mw12": "mw8"} center spvar fw4 near-black`, style:"flex-grow:1"},
               [
 
-               
+            
                  vnode.children
              
 

@@ -23,7 +23,8 @@ const Introduction = (vnode)=>{
                 m("p",[`Second, you’ll `, m("span",{class:"fw7"},`select a primary data partner`), `. Each potential partnership has different strengths and weaknesses, and will facilitate or foreclose different types of pilot projects.`]),
                 m("p",[`Finally, you’ll `,m("span",{class:"fw7"},`select a pilot project.`),` The pilot projects available to you will change based on your primary data partner. In addition to selecting a pilot project, we’ll ask you to reflect on what you hope to learn from the selected pilot, and how you might evaluate whether it should continue.`]),
                 
-                vnode.attrs.mp === true ? 
+                
+                vnode.attrs.mp === true || vnode.attrs.preview === true ? 
                m("p", {class:"tc pa2"}, [
                  m("input", {type:"checkbox", class:"mr2", id:"ready", checked: ready, oninput:async (e)=>{
                     // ready = e.target.value;

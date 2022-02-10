@@ -50,7 +50,7 @@ const PartnershipsView = (vnode)=>{
                /* Partnerships.map((partnership)=>{
                     return m(PartnershipView, {partnership: partnership, key: partnership.id})
                 })*/
-                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:`/pilots?partner=${Chosen}`, partner:Chosen})
+                vnode.attrs.mp === true || vnode.attrs.preview === true ? null : m(LinkButton, {text:"Next!", href:`/pilots?partner=${Chosen}`, partner:Chosen})
 
             ])
             ]

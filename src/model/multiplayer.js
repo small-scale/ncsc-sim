@@ -117,6 +117,16 @@ const Host = {
         })
             //connect to data listeners
     },
+    disconnect:()=>{
+        if(Host.roomListener != {}){
+            Host.roomListener();
+        }
+        if(Host.participantListener != {}){
+            Host.participantListener();
+        }
+        room = {}
+        participantData = {}
+    },
     participantListener:{},
     roomListener:{},
     room:{},
@@ -125,6 +135,11 @@ const Host = {
     }
 }
 
+const Heartbeat = {
+    //heartbeat every X seconds
+    //heartbeat on update event
+    //heartbeat manual refresh
+}
 
 
 const Player = {
@@ -174,6 +189,14 @@ const Player = {
         }
         if(Player.playerListener != {}){
             Player.playerListener();
+        }
+        Player.playerData = {
+            ready: false,
+            ranking1: [],
+            ranking2: [],
+            courtRole: null,
+            partnership: null,
+            pilot: null
         }
     },
     submit:async (room, data)=>{

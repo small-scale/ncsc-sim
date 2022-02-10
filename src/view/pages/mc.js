@@ -8,7 +8,7 @@ import { Player } from "../../model/multiplayer"
 
 
 
-const Answers = Model.content.courtRole.choices
+const Answers = Model.content.courtRole
 
 const choose = (answer, room=null)=>{
     Player.submit(room, {courtRole:answer})
@@ -28,7 +28,7 @@ const MC = (vnode)=>{
                 m(AnswerListView, {room: vnode.attrs.room}),
                 
                 
-                vnode.attrs.mp === true ? null : m(LinkButton, {text:"Next!", href:"/partnership"})
+                vnode.attrs.mp === true || vnode.attrs.preview === true ? null : m(LinkButton, {text:"Next!", href:"/partnership"})
               
             ])
             ]
@@ -42,7 +42,7 @@ const AnswerListView = (vnode)=>{
     return {
         view:(vnode)=>{
             let room = vnode.attrs.room
-            return m("form", {class:`mw7 center ${cx(AnswerListGrid)}`, oninput:(e)=>{choose(e.target.value, room)}},                
+            return m("form", {class:`mw7 center ${cx(AnswerListGrid)}`, oninput:(e)=>{choose(e.target.value, room)}, value:Player.playerData.courtRole || ""},                
                 Answers.map((answer)=>{
                     return m(AnswerView, {answer:answer})
                 })
@@ -54,19 +54,19 @@ const AnswerListView = (vnode)=>{
 
 const AnswerView = (vnode)=>{
     const answer = vnode.attrs.answer
-    const icon = answer.icon;
+    const icon = answer.id;
     const copy = answer.copy;
-    const header = answer.header;
+    const header = answer.name;
     return {
         view:(vnode)=>{
             return m("label", {
                 for:icon,
                
-                class:`pointer bw2 input-reset bg-transparent tl ba b--transparent pa2-ns pa1 ${Player.playerData.courtRole == header ? cx(AnswerGrid, selectedClass) : cx(AnswerGrid, hoverAdjust)}`,
+                class:`pointer bw2 input-reset bg-transparent tl ba b--transparent pa2-ns pa1 ${Player.playerData.courtRole == icon ? cx(AnswerGrid, selectedClass) : cx(AnswerGrid, hoverAdjust)}`,
                 onclick: (e)=>{/*choose(header)*/}
             
                 }, [
-                m("input",{type:"radio", id:icon, class:cx(invisibleRadio), value:header,  name:"courtRole",}),
+                m("input",{type:"radio", id:icon, class:cx(invisibleRadio), value:icon,  name:"courtRole",}),
                 m("img", {src:`static/${icon}.png`, class:"ba b--black bw1"}),
                 m("p", {class:"pv0 mv0 f5-ns f6 lh-copy"}, [m("span", {class:"fw7 pr2"}, header), m("span", copy)]),
                
