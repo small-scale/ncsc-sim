@@ -77,7 +77,7 @@ const Host = {
             await setDoc(doc(db,"rooms",id),{
                 owner: User.id,
                 id: id,
-                route: "/",
+                route: "intro",
                 status:"open"
                  
             },{
@@ -124,8 +124,8 @@ const Host = {
         if(Host.participantListener != {}){
             Host.participantListener();
         }
-        room = {}
-        participantData = {}
+        Host.room = {}
+        Host.participantData = {}
     },
     participantListener:{},
     roomListener:{},
@@ -194,9 +194,9 @@ const Player = {
             ready: false,
             ranking1: [],
             ranking2: [],
-            courtRole: null,
-            partnership: null,
-            pilot: null
+            courtRole: "",
+            partnership: "",
+            pilot: ""
         }
     },
     submit:async (room, data)=>{
@@ -247,9 +247,9 @@ const Player = {
                 ready: false,
                 ranking1: [],
                 ranking2: [],
-                courtRole: null,
-                partnership: null,
-                pilot: null
+                courtRole: "",
+                partnership: "",
+                pilot: ""
                 
             }, {merge: true})
             await setDoc(doc(db,"users",User.id),{
@@ -269,9 +269,9 @@ const Player = {
         ready: false,
         ranking1: [],
         ranking2: [],
-        courtRole: null,
-        partnership: null,
-        pilot: null
+        courtRole: "",
+        partnership: "",
+        pilot: ""
     },
 }
 //game status 

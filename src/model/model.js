@@ -11,9 +11,9 @@ const Model = {
     answers: {
         ranking1: [],
         ranking2: [],
-        courtRole: null,
-        partnership: null,
-        pilot: null
+        courtRole: "",
+        partnership: "",
+        pilot: ""
     },
 
     update:(id, data)=>{

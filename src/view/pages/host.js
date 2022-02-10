@@ -159,7 +159,10 @@ const AggregateVotingData = (data, key)=>{
            if(hasOutput(AggRanking)){
                AggRanking[output]+=1
            } else{
-            AggRanking[output] = 1
+            if(output !== "" && output!==null){
+                AggRanking[output] = 1
+            }
+            
            }
         }
     })
