@@ -1,10 +1,10 @@
 //player status
 import { getAuth, onAuthStateChanged, } from "firebase/auth";
 import { db } from "../util/firebase";
-import { arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, setDoc, query, updateDoc } from "firebase/firestore"; 
+import { arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, setDoc, query, updateDoc, where } from "firebase/firestore"; 
 import { UID } from "../util/uid";
 import m from "mithril";
-import { mergeDeepRight } from "ramda";
+import { has, mergeDeepRight } from "ramda";
 
 const auth = getAuth();
 onAuthStateChanged(auth, async (user) => {
@@ -74,11 +74,21 @@ const Host = {
         //initialize
         if(User.id !== null){
             const id = UID()
+            const sync = UID()
+            Host.room = {
+                owner: User.id,
+                id: id,
+                route: "intro",
+                status:"open",
+                sync:sync
+                 
+            }
             await setDoc(doc(db,"rooms",id),{
                 owner: User.id,
                 id: id,
                 route: "intro",
-                status:"open"
+                status:"open",
+                sync:sync
                  
             },{
                 merge: true
@@ -96,28 +106,47 @@ const Host = {
        
         
     },
+    resync: async(room)=>{
+        const newCode = UID();
+        await Host.update(room, {sync:newCode})
+        //return
+    },
     update: async(room, data)=>{
         const roomRef = doc(db,"rooms",room)
         await updateDoc(roomRef, data, {merge:true})
+        return
     },
     connect:async (room)=>{
-        const participantRef = query(collection(db, "rooms", room, "participants"))
         const roomRef = doc(db, "rooms", room)
+        
+        const roomSnap = await getDoc(roomRef);
+        if(roomSnap.exists()){
+            Host.room = roomSnap.data()
+            m.redraw()
+        }
 
         Host.roomListener = await onSnapshot(roomRef, (doc)=>{
             Host.room = doc.data()
+            m.redraw()
         })
+        const sync =  Host.room.sync || ""
+        const participantRef = query(collection(db, "rooms", room, "participants"),where("sync", "==", sync))
 
         Host.participantListener = await onSnapshot(participantRef, (querySnapshot)=>{
+            console.log('query')
             querySnapshot.forEach((doc)=>{
-                Host.participantData[doc.id] = doc.data()
-                
+                console.log("doc")
+                Host.participantData[doc.id] = doc.data() 
             })
             m.redraw();
         })
+      //  Host.syncMaintainer=setInterval(Host.resync, 10000, room)
             //connect to data listeners
     },
     disconnect:()=>{
+        if (Host.syncMaintainer!={}){
+            clearInterval(Host.syncMaintainer)
+        }
         if(Host.roomListener != {}){
             Host.roomListener();
         }
@@ -127,6 +156,7 @@ const Host = {
         Host.room = {}
         Host.participantData = {}
     },
+    syncMaintainer: {},
     participantListener:{},
     roomListener:{},
     room:{},
@@ -219,12 +249,14 @@ const Player = {
 
         Player.roomListener = onSnapshot(roomRef,(doc)=>{
             const oldRoute = Player.roomData.route
+            const oldSync = Player.roomData.sync
             if(oldRoute !== doc.data().route){
                 window.scrollTo(0,0)
             }
+            if(oldSync !== doc.data().sync){
+                Player.submit(room, {sync: doc.data().sync})
+            }
             Player.roomData = doc.data();
-            console.log("room update")
-            console.log(doc.data())
             m.redraw();
         })
 

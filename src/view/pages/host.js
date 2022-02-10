@@ -11,13 +11,15 @@ import Ranking from "./ranking";
 import RankingTwo from "./ranking2";
 
 import { css, cx } from "@emotion/css"
-import { append, descend, flatten, has, length, prop, sortBy } from "ramda";
+import { append, compose, descend, filter, flatten, has, includes, length, prop, sortBy } from "ramda";
 import { Model } from "../../model/model";
+import { __ } from "ramda";
 
 const RemoteGrid = css`
 display: grid;
+grid-template-rows: 75px 1fr 1fr;
 grid-template-columns: .75fr 1fr 1fr;
-grid-template-areas: "c b b"
+grid-template-areas: "a b b"
             "c b b"
             "c b b";
 grid-gap:10px;
@@ -59,10 +61,6 @@ const HostDash = (vnode)=>{
             m("h1", {class:"f3 f1-ns fw7"}, "Host"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
                 m("p",`Room Code: ${vnode.attrs.room}`),
-                m("p",`Participants`),
-                Object.entries(Host.participantData).map(([key, value])=>{
-                    return m("p", value.name || "Anonymous")
-                }),
                 m(Remote, {room:vnode.attrs.room}),
 
                 
@@ -141,7 +139,6 @@ const AggregateRankingData = (data, key)=> {
 
     let sortByTotal = sortBy(descend(prop(4)))
     const sortedRanking = sortByTotal(ListedRanking)
-    console.log(sortedRanking)
     //then sort by total
     return sortedRanking
 }
@@ -209,7 +206,6 @@ const VotingTable = (vnode)=>{
     return {
         view:(vnode)=>{
              let data = AggregateVotingData(Host.participantData, vnode.attrs.id);
-             console.log(data)
             return length(data)===0 ? null : m("div",{class:"pa3 ba b--black mv3 mh2"},
             [   m("h2", {class:"f4 fw7 mt2 mb4", style:"max-width:450px"}, vnode.attrs.title),
                 m("div", {class:`${cx(VotedTable)}`}, 
@@ -261,7 +257,7 @@ const RemoteItem = (vnode)=>{
                 class:`${vnode.attrs.class} pv2 pointer ${highlight ? "bg-black-10 bn br3 b--black" : ""}`,
                 onclick:(e)=>{
                     Host.update(vnode.attrs.room, {route:vnode.attrs.route})
-                    PreviewRoute = vnode.attrs.route
+                    //PreviewRoute = vnode.attrs.route
                 },
                 onmouseover:(e)=>{
                     TempRoute = vnode.attrs.route
@@ -275,13 +271,38 @@ const RemoteItem = (vnode)=>{
     }
 }
 
-let PreviewRoute = Host.room.route || "intro"
+
+let PreviewRoute;
 let TempRoute = ''
+
+const getRoute = (route)=>{return includes("pilot", route) ? "pilot" : route === "intro" ? "ready" : route}
+const isReady = (item, route)=>{
+                                if(item[route]){
+                                    return true} 
+                                else {
+                                    return false}
+                                }
+
+const getReady = (item)=>{
+    const route = getRoute(Host.room.route)
+    return isReady(item, route)
+}
+
+const readyParticipants = filter(getReady)
 
 const Remote = (vnode)=>{
     return {
         view:(vnode)=>{
+            PreviewRoute = Host.room.route || "intro"
+            let test = JSON.stringify(Host.participantData)
             return m("section", {class:cx(RemoteGrid)}, [
+                m("aside",{class:`pa3 ba tc bw1 ${cx(DashMenu)}`}, [
+                    m("span", {class:"f5 fw7 mt1" }, `Ready: ${length(readyParticipants(Object.values(Host.participantData)))} / `), 
+                    m("span", {class:"f5 fw7 mt1" }, `Participants: ${length(Object.values(Host.participantData))}`),
+                    
+
+                       
+                ]),
                 m("aside", {class:`pa3 ba bw1 ${cx(RemoteMenu)}`}, [
                     m("ul",{
                         class:`list pl1 lh-copy`

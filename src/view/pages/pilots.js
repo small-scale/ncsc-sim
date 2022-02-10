@@ -37,7 +37,6 @@ const producePilots = (partner = null)=>{
 
 const PilotsView = (vnode)=>{
     const pilotSubset = producePilots(vnode.attrs.partner)
-    console.log(vnode.attrs.room)
     return {
         view: (vnode)=>{
             let room = vnode.attrs.room || null
