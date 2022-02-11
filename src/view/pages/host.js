@@ -43,6 +43,13 @@ max-width: 450px;
 align-items:center;
 `
 
+const flagGrid = css`
+display:grid;
+grid-template-columns: 75px 1fr;
+grid-gap: 10px;
+align-items:center;
+`
+
 const RankedTable = css`
 display: grid;
 grid-template-columns: 1fr 50px 50px 50px 50px;
@@ -51,7 +58,15 @@ min-width: 300px;
 max-width: 450px;
 `
 
+const DataCardGrid = css`
+display: grid;
+grid-template-columns: 1fr 1fr;
+grid-gap:10px;
+min-width: 300px;
+max-width: 450px;
+`
 
+let DataSetting = "aggregate"
 const HostDash = (vnode)=>{
     return {
         oninit:(vnode)=>{Host.connect(vnode.attrs.room)},
@@ -65,6 +80,20 @@ const HostDash = (vnode)=>{
 
                 
                 m("h2", {class:"f2 fw7 mt5 mb0", oncreate:(vnode)=>{twemoji.parse(vnode.dom)}}, "📊 Data"),
+                m("p",{},[
+                    m("button", {
+                        class:`pa3 bn mr3 f5 pointer ${DataSetting === "aggregate" ? "fw7 bg-black-10 br3" : "fw4 bg-transparent br3"}`,
+                        onclick: (e)=>{
+                            DataSetting = "aggregate"
+                        }
+                    }, "Aggregate"),
+                    m("button", {
+                        class:`pa3 bn f5 pointer ${DataSetting === "individual" ? "fw7 bg-black-10  br3" : "fw4 bg-transparent br3"}`,
+                        onclick: (e)=>{
+                            DataSetting = "individual"
+                        }
+                    }, "Individual"),
+                ]),
                 m(DataView),
                 
                 //console.log(AggregateRankingData(Host.participantData, "ranking1")),
@@ -226,10 +255,71 @@ let TempData = ''
 const DataView = (vnode)=>{
     return {
         view: (vnode)=>{
+          //  console.log(Object.values(Host.participantData))
             return m("section",{
                 class:`flex flex-wrap center justify-around`
             },[
-                m(DataDash)
+                DataSetting === "aggregate" ? 
+                m(DataDash) : 
+                Object.values(Host.participantData).map((item)=>{
+                    return m(IndividualDataCard,{participant:item}) 
+                })
+               
+            ])
+        }
+    }
+}
+
+const IndividualDataCard = (vnode)=>{
+    return {
+        view: (vnode)=>{
+            const participant = vnode.attrs.participant
+           // console.log(participant)
+            return m("div",{class:"pa3 ba b--black mv3 mh2"}, [
+                m("h2", {class:"f3 mb1 fw7"}, participant["name"]),
+                m("div",{class:`${cx(DataCardGrid)}`},[
+                    isEmpty(participant["ranking1"]) ? null :
+                    [m("p",{class:"fw7"}, "Internal Values"),
+                    m("p", {}, [
+                        participant["ranking1"].map((item, index)=>{
+                            return m("p",{class:"mv0"}, `${index+1}. ${item}`)
+                        })
+                    ]),],
+                    isEmpty(participant["ranking2"]) ? null :
+                    [
+                        m("p",{class:"fw7"}, "External Values"),
+                        m("p", {}, [
+                            participant["ranking2"].map((item, index)=>{
+                                return m("p",{class:"mv0"}, `${index+1}. ${item}`)
+                            })
+                        ]),
+                    ],
+                    isEmpty(participant["courtRole"]) ? null :
+                    [
+                        m("p",{class:"fw7"}, "Court role in data requests"),
+                        m("p", {class:cx(flagGrid)}, [
+                            m("img", {style:"width:50px",src:`static/${participant["courtRole"]}.png`}),
+                            m("span", Model.getFieldById("courtRole", participant["courtRole"], "name")),
+                        ]),
+                    ],
+                    isEmpty(participant["partnership"]) ? null :
+                   [
+                        m("p",{class:"fw7"}, "Primary data partner"),
+                        m("p", {class:cx(flagGrid)}, [
+                            m("img", {style:"width:50px",src:`static/${participant["partnership"]}.png`}),
+                            m("span", Model.getFieldById("partnership", participant["partnership"], "name")),
+                        ]),
+                    ],
+                    isEmpty(participant["pilot"]) ? null :
+                   [
+                        m("p",{class:"fw7"}, "Pilot project"),
+                        m("p", {class:cx(flagGrid)}, [
+                            m("img", {style:"width:50px",src:`static/${participant["pilot"]}.png`}),
+                            m("span", Model.getFieldById("pilot", participant["pilot"], "name")),
+                        ]),
+                    ]
+                ])
+                
             ])
         }
     }
@@ -285,8 +375,8 @@ const isReady = (item, route)=>{
 
 const getReady = (item)=>{
     const route = getRoute(Host.room.route)
-    console.log(route)
-    console.log(isReady(item, route))
+   // console.log(route)
+   // console.log(isReady(item, route))
     return isReady(item, route)
 }
 
