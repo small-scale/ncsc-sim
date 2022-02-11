@@ -11,7 +11,7 @@ import Ranking from "./ranking";
 import RankingTwo from "./ranking2";
 
 import { css, cx } from "@emotion/css"
-import { append, compose, descend, filter, flatten, has, includes, length, prop, sortBy } from "ramda";
+import { append, compose, descend, filter, flatten, has, includes, isEmpty, length, prop, sortBy } from "ramda";
 import { Model } from "../../model/model";
 import { __ } from "ramda";
 
@@ -254,7 +254,7 @@ const RemoteItem = (vnode)=>{
         view: (vnode)=>{
             const highlight = vnode.attrs.route === TempRoute || vnode.attrs.route === PreviewRoute;
             return m("li", {
-                class:`${vnode.attrs.class} pv2 pointer ${highlight ? "bg-black-10 bn br3 b--black" : ""}`,
+                class:`${vnode.attrs.class} f5 pv2 pointer ${highlight ? "bg-black-10 bn br3 b--black" : ""}`,
                 onclick:(e)=>{
                     Host.update(vnode.attrs.room, {route:vnode.attrs.route})
                     //PreviewRoute = vnode.attrs.route
@@ -277,7 +277,7 @@ let TempRoute = ''
 
 const getRoute = (route)=>{return includes("pilot", route) ? "pilot" : route === "intro" ? "ready" : route}
 const isReady = (item, route)=>{
-                                if(item[route]){
+                                if(item[route] && !(isEmpty(item[route])) ){
                                     return true} 
                                 else {
                                     return false}
@@ -285,6 +285,8 @@ const isReady = (item, route)=>{
 
 const getReady = (item)=>{
     const route = getRoute(Host.room.route)
+    console.log(route)
+    console.log(isReady(item, route))
     return isReady(item, route)
 }
 
