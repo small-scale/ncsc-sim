@@ -22,11 +22,11 @@ const MultiplayerMenu = ()=>{
             return [
             m("h1", {class:"f3 f1-ns fw7"}, "Building court data partnerships"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
-                m("p",`${User.id === null ? "Connecting to multiplayer service, please wait." : User.id }`),
+                m("p",`${User.id === null ? "Connecting to multiplayer service, please wait." : 'Successfully connected.' }`),
                 
                 User.id === null ? null :
                 [
-                    m("p",`Existing Connections`),
+                    m("p",`Previous Rooms`),
                     User.host.map((room)=>{
                         return m("p", [m(m.route.Link, {selector: "a", class:"link black underline", href:`/host/${room}`}, `Rehost room ${room}` ), ])
                     }),

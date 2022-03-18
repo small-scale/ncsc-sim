@@ -35,6 +35,8 @@ const producePilots = (partner = null)=>{
     return shuffle(matchedPilots)
 }
 
+
+
 const PilotsView = (vnode)=>{
     const pilotSubset = producePilots(vnode.attrs.partner)
     return {
@@ -43,7 +45,7 @@ const PilotsView = (vnode)=>{
             return [
                 m("h1", {class:"f3 f1-ns fw7"}, "Select a pilot"),
             m("section", {class:"f4-ns f5 lh-copy"}, [
-                m("p",`Based on your partnership selection, there are ${length(pilotSubset)} pilots available to you. You can select one to proceed with.`),
+                m("p",`${vnode.attrs.mp ? "Your group selected" : "You selected"} ${Model.getFieldById("partnership", vnode.attrs.partner, "name")}. Based on your partnership selection, there are ${length(pilotSubset)} pilots available to you. You can select one to proceed with.`),
                 
                 m("form", {
                     class:`center mw12 ${cx(PilotsGrid)}`,

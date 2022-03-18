@@ -109,7 +109,8 @@ const Host = {
     resync: async(room)=>{
         const newCode = UID();
         await Host.update(room, {sync:newCode})
-        //return
+        m.redraw();
+        return
     },
     update: async(room, data)=>{
         const roomRef = doc(db,"rooms",room)
@@ -130,13 +131,15 @@ const Host = {
             m.redraw()
         })
         const sync =  Host.room.sync || ""
-        const participantRef = query(collection(db, "rooms", room, "participants"),where("sync", "==", sync))
+        const participantRef = query(collection(db, "rooms", room, "participants"))
 
         Host.participantListener = await onSnapshot(participantRef, (querySnapshot)=>{
             console.log('query')
             querySnapshot.forEach((doc)=>{
                 console.log("doc")
                 Host.participantData[doc.id] = doc.data() 
+                //console.log(doc.data())
+               // m.redraw();
             })
             m.redraw();
         })

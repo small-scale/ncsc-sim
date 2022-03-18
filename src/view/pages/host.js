@@ -14,10 +14,11 @@ import { css, cx } from "@emotion/css"
 import { append, compose, descend, filter, flatten, has, includes, isEmpty, length, prop, sortBy } from "ramda";
 import { Model } from "../../model/model";
 import { __ } from "ramda";
+import { invisibleRadio } from "../components/styles";
 
 const RemoteGrid = css`
 display: grid;
-grid-template-rows: 75px 1fr 1fr;
+grid-template-rows: 125px 1fr 1fr;
 grid-template-columns: .75fr 1fr 1fr;
 grid-template-areas: "a b b"
             "c b b"
@@ -37,7 +38,7 @@ grid-area: b
 const VotedTable = css`
 display: grid;
 grid-template-columns: 75px 1fr 50px;
-grid-gap: 10px;
+grid-gap: 15px;
 min-width: 300px;
 max-width: 450px;
 align-items:center;
@@ -46,7 +47,7 @@ align-items:center;
 const flagGrid = css`
 display:grid;
 grid-template-columns: 75px 1fr;
-grid-gap: 10px;
+grid-gap: 15px;
 align-items:center;
 `
 
@@ -276,10 +277,10 @@ const IndividualDataCard = (vnode)=>{
             const participant = vnode.attrs.participant
            // console.log(participant)
             return m("div",{class:"pa3 ba b--black mv3 mh2"}, [
-                m("h2", {class:"f3 mb1 fw7"}, participant["name"]),
-                m("div",{class:`${cx(DataCardGrid)}`},[
+                participant["name"] ? m("h2", {class:"f3 mb1 fw7"}, participant["name"]) : null,
+                m("div",{class:``},[
                     isEmpty(participant["ranking1"]) ? null :
-                    [m("p",{class:"fw7"}, "Internal Values"),
+                    [m("p",{class:"fw7"}, "Internal court data initiatives should prioritize: "),
                     m("p", {}, [
                         participant["ranking1"].map((item, index)=>{
                             return m("p",{class:"mv0"}, `${index+1}. ${item}`)
@@ -287,7 +288,7 @@ const IndividualDataCard = (vnode)=>{
                     ]),],
                     isEmpty(participant["ranking2"]) ? null :
                     [
-                        m("p",{class:"fw7"}, "External Values"),
+                        m("p",{class:"fw7"}, "External court data initatives should prioritize: "),
                         m("p", {}, [
                             participant["ranking2"].map((item, index)=>{
                                 return m("p",{class:"mv0"}, `${index+1}. ${item}`)
@@ -296,25 +297,25 @@ const IndividualDataCard = (vnode)=>{
                     ],
                     isEmpty(participant["courtRole"]) ? null :
                     [
-                        m("p",{class:"fw7"}, "Court role in data requests"),
+                        m("p",{class:"fw7"}, "What role should courts have in reviewing requests for court data?"),
                         m("p", {class:cx(flagGrid)}, [
-                            m("img", {style:"width:50px",src:`static/${participant["courtRole"]}.png`}),
+                            m("img", {style:"width:75px;",src:`static/${participant["courtRole"]}.png`}),
                             m("span", Model.getFieldById("courtRole", participant["courtRole"], "name")),
                         ]),
                     ],
                     isEmpty(participant["partnership"]) ? null :
                    [
-                        m("p",{class:"fw7"}, "Primary data partner"),
+                        m("p",{class:"fw7"}, "Our court's primary data partner should be: "),
                         m("p", {class:cx(flagGrid)}, [
-                            m("img", {style:"width:50px",src:`static/${participant["partnership"]}.png`}),
+                            m("img", {style:"width:75px",src:`static/${participant["partnership"]}.png`}),
                             m("span", Model.getFieldById("partnership", participant["partnership"], "name")),
                         ]),
                     ],
                     isEmpty(participant["pilot"]) ? null :
                    [
-                        m("p",{class:"fw7"}, "Pilot project"),
+                        m("p",{class:"fw7"}, "Our court's first pilot project should be:"),
                         m("p", {class:cx(flagGrid)}, [
-                            m("img", {style:"width:50px",src:`static/${participant["pilot"]}.png`}),
+                            m("img", {style:"width:75px",src:`static/${participant["pilot"]}.png`}),
                             m("span", Model.getFieldById("pilot", participant["pilot"], "name")),
                         ]),
                     ]
@@ -379,43 +380,51 @@ const getReady = (item)=>{
    // console.log(isReady(item, route))
     return isReady(item, route)
 }
-
+const isSynced = (item)=>{
+    return Host.room.sync === item.sync
+}
 const readyParticipants = filter(getReady)
-
+const activeParticipants = filter(isSynced)
 const Remote = (vnode)=>{
     return {
         view:(vnode)=>{
+            console.log(length(activeParticipants(Object.values(Host.participantData))))
             PreviewRoute = Host.room.route || "intro"
             let test = JSON.stringify(Host.participantData)
             return m("section", {class:cx(RemoteGrid)}, [
-                m("aside",{class:`pa3 ba tc bw1 ${cx(DashMenu)}`}, [
-                    m("span", {class:"f5 fw7 mt1" }, `Ready: ${length(readyParticipants(Object.values(Host.participantData)))} / `), 
-                    m("span", {class:"f5 fw7 mt1" }, `Participants: ${length(Object.values(Host.participantData))}`),
+                m("aside",{class:`pa3 ba tc  bw1 ${cx(DashMenu)}`}, [
+                    m("p", {class:"mt0"}, [
+                        m("span", {class:"f4 fw7 mt1" }, `Ready: ${length(readyParticipants(Object.values(Host.participantData)))} / `), 
+                        m("span", {class:"f4 fw7 mt1" }, `Participants: ${length(activeParticipants(Object.values(Host.participantData)))}`),
+                    ]),
                     
+                    m("p", {class:"tc"}, 
+                    m("button",{class:"ba pointer b--black fw7 f5 pa2 bg-transparent black hover-white hover-bg-green mb2",oncreate:(vnode)=>{twemoji.parse(vnode.dom)},onclick:(e)=>{Host.resync(vnode.attrs.room)}},"🔄 Refresh"))
 
                        
                 ]),
                 m("aside", {class:`pa3 ba bw1 ${cx(RemoteMenu)}`}, [
-                    m("ul",{
-                        class:`list pl1 lh-copy`
+                    m("form",{
+                        class:`list pl1 lh-copy`,
+                        oninput:(e)=>{Host.update(vnode.attrs.room, {route: e.target.value})}
                     },
                     [
                         m("h2", {class:"f2 fw7", oncreate:(vnode)=>{twemoji.parse(vnode.dom)}}, "🎮 Remote"),
                         m(RemoteItem,{room:vnode.attrs.room, route:"intro", copy: "Introduction", class:"pl1"}),
                         m("li",{class:"fw7 mid-gray pv2 pl1"}, `Part 1: Values`),
-                        m(RemoteItem,{room:vnode.attrs.room, route:"ranking1", copy: "Internal Values", class:"pl4"}),
-                        m(RemoteItem,{room:vnode.attrs.room, route:"ranking2", copy: "External Values", class:"pl4"}),
-                        m(RemoteItem,{room:vnode.attrs.room, route:"mc", copy: "How should courts manage data requests?", class:"pl4"}),
+                        m(RemoteItem,{room:vnode.attrs.room, route:"ranking1", copy: "Internal Values", class:"ph4"}),
+                        m(RemoteItem,{room:vnode.attrs.room, route:"ranking2", copy: "External Values", class:"ph4"}),
+                        m(RemoteItem,{room:vnode.attrs.room, route:"mc", copy: "How should courts manage data requests?", class:"ph4"}),
                         m("li",{class:"fw7 mid-gray mv2"}, `Part 2: Partnership`),
-                        m(RemoteItem,{room:vnode.attrs.room, route:"partnership", copy: "Choose a partnership", class:"pl4"}),
+                        m(RemoteItem,{room:vnode.attrs.room, route:"partnership", copy: "Choose a partnership", class:"ph4"}),
                         m("li",{class:"fw7 mid-gray mv2"}, `Part 3: Pilot`),
                         m("li",{class:"fw2 i f5"},  `Pick the pilot page that corresponds with your chosen partnership.`),
                         m(RemoteItem,{room:vnode.attrs.room, route:"pilot?partner=university", copy: "East Cherwell University Pilots", class:"pl4"}),
-                        m(RemoteItem,{room:vnode.attrs.room, route:"pilot?partner=courtfeed", copy: "Courtfeed Pilots", class:"pl4"}),
-                        m(RemoteItem,{room:vnode.attrs.room, route:"pilot?partner=iliad", copy: "Iliad Systems Pilots", class:"pl4"}),
+                        m(RemoteItem,{room:vnode.attrs.room, route:"pilot?partner=courtfeed", copy: "Courtfeed Pilots", class:"ph4"}),
+                        m(RemoteItem,{room:vnode.attrs.room, route:"pilot?partner=iliad", copy: "Iliad Systems Pilots", class:"ph4"}),
                         m(RemoteItem,{room:vnode.attrs.room, route:"pilot?partner=government", copy: "Cherwell County Government Pilots", class:"pl4"}),
                         m("li",{class:"fw7 mid-gray mv2"}, `Part 4: Discussion`),
-                        m(RemoteItem,{room:vnode.attrs.room, route:"discussion", copy: "Discussion questions and credits", class:"pl4"}),
+                        m(RemoteItem,{room:vnode.attrs.room, route:"discussion", copy: "Discussion questions and credits", class:"ph4"}),
                         //maybe separate
 
                     ]),
@@ -518,4 +527,4 @@ const PreviewRouter = {
     },
 }
 
-export default HostDash
+export  {HostDash, IndividualDataCard}

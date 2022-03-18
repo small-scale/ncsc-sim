@@ -48,7 +48,7 @@ const JoinView = (vnode)=>{
         view:(vnode)=>{
             let room = Player.roomData
             return [
-                m("p", `Joined ${vnode.attrs.room}`),
+                m("p", {class:"bg-washed-blue b--light-blue dark-blue ba pa3 br3 f5"}, `You have joined room ${vnode.attrs.room} as ${Player.playerData.name}. Your host will remotely control the questions that you and other participants see.`),
              /*   m("p", room.status),
                 m("p", room.route),*/
                 room.route ? m(JoinRouter[room.route], {playerData: Player.playerData, room:vnode.attrs.room}) : null

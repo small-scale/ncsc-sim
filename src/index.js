@@ -9,11 +9,12 @@ import PilotsView from "./view/pages/pilots"
 import Ranking from "./view/pages/ranking"
 import RankingTwo from "./view/pages/ranking2"
 import MultiplayerMenu from "./view/pages/multiplayer"
-import HostDash from "./view/pages/host"
+import {HostDash} from "./view/pages/host"
 import { JoinDash, JoinView } from "./view/pages/join"
 import { Player } from "./model/multiplayer"
 import { signInAnonymously } from "firebase/auth"
 import { auth } from "./util/firebase"
+import Splash from "./view/pages/splash"
 
 
 
@@ -50,10 +51,16 @@ const AppRouter = ()=>{
                 return m(Layout, m(MultiplayerMenu, {error:m.route.param("error")}))
             }
         },
-        '/':{
+        '/intro':{
             
             view:()=>{
                return m(Layout, m(Introduction))
+            }
+        },
+        '/':{
+            
+            view:()=>{
+               return m(Layout, m(Splash))
             }
         },
         '/ranking1':{
@@ -83,7 +90,7 @@ const AppRouter = ()=>{
         },
         '/discussion':{
             view:()=>{
-               return m(Layout, m(Discussion))
+               return m(Layout, m(Discussion, {showCard:true}))
             }
         },
         '/host/:id':{
